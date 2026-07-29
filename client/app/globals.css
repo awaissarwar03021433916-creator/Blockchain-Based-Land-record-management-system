@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   Design tokens
+   -----------------------------------------------------------------------------
+   Brand: five greens (#c7f9cc, #b7efc5, #2dc653, #1a7431, #10451d).
+   Greens own the brand + semantic-positive layer; reserved status colors
+   (warning amber, destructive red) handle attention + failure.
+   Tokens are declared as HSL triplets (no `hsl()` wrapper) so Tailwind can
+   compose them with `hsl(var(--token) / <alpha-value>)`.
+   ============================================================================= */
+@layer base {
+  :root {
+    /* Surface canvas */
+    --background: 48 33% 98%;          /* warm off-white   #fafaf9 */
+    --foreground: 0 0% 4%;             /* near-black ink   #0a0a0a */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+
+    /* Brand-driven semantic tokens
+       primary = brand-700  (the "pen" — main CTA)
+       accent  = brand-500  (the "stamp" — verified / live)
+       secondary = brand-100 (soft tint surface) */
+    --primary: 138 63% 28%;            /* #1a7431 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 134 81% 88%;          /* #c7f9cc */
+    --secondary-foreground: 138 63% 17%; /* #10451d */
+
+    --accent: 137 64% 48%;             /* #2dc653 */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;    /* slate-500-ish */
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 138 63% 28%;               /* brand-700 — focus rings */
+
+    /* Reserved status (NOT in brand greens — see design doc rationale) */
+    --warning: 35 92% 44%;             /* amber-600 */
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 72% 42%;          /* red-700 */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Shape + selection */
+    --radius: 0.625rem;                /* 10px — modern, not pill */
+  }
+}
+
+/* =============================================================================
+   Base typography + element resets
+   ============================================================================= */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+
+  /* Editorial / "official document" headlines use the serif family. */
+  h1, h2, h3 {
+    @apply font-serif text-foreground;
+    letter-spacing: -0.015em;
+  }
+  h1 { @apply text-3xl md:text-4xl font-semibold leading-tight; }
+  h2 { @apply text-2xl font-semibold leading-tight; }
+  h3 { @apply text-xl font-semibold leading-snug; }
+  h4, h5, h6 { @apply font-sans font-semibold; }
+
+  p { @apply leading-relaxed; }
+
+  /* Selection: gentle brand tint so highlighting in the marketplace
+     reinforces the visual language rather than fighting it. */
+  ::selection {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+  }
+
+  /* Focus-visible ring (keyboard nav) — accessible without screaming. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Tabular numerals for any number-rendering element by default. */
+  table, th, td {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* =============================================================================
+   Project-specific utilities
+   ============================================================================= */
+@layer utilities {
+  /* Mono utility for chain primitives — applied to addresses, tx hashes,
+     plot numbers. Sets tabular-nums so columns of hashes align. */
+  .font-chain {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  /* Uppercase tracked "eyebrow" label — used above section titles and
+     in stat-card labels. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    @apply text-muted-foreground font-medium;
+  }
+
+  /* Skeleton shimmer — referenced by future <Skeleton/> primitive. */
+  .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--secondary)) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer rounded-md;
+  }
+}

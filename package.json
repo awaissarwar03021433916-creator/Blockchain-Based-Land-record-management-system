@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "name": "land-blockchain-fyp",
+  "version": "1.0.0",
+  "dependencies": {
+    "lucide-react": "^1.7.0",
+    "web3": "^4.16.0"
+  }
+}
